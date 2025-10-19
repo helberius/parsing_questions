@@ -15,16 +15,21 @@ def process_one_test(dict_run):
             question_id = pf.get_question_id(question_statement_and_potential_answers)
             ls_possible_answers_raw = pf.get_question_possible_answers(question_statement_and_potential_answers)
             ls_valid_possible_answers_clean, ls_indexes_correct_answers = pf.analyze_answers(ls_possible_answers_raw)
-            if len(ls_indexes_correct_answers)>2:
-                print(dict_run["test_id"], "filter 1", question_id)
-                pass
-            elif len(ls_indexes_correct_answers)==1 and ls_indexes_correct_answers[0] > 6:
-                print(dict_run["test_id"], "filter 2", question_id)
-                pass
-            elif len(ls_indexes_correct_answers)==2 and (ls_indexes_correct_answers[0]>6 or ls_indexes_correct_answers[1]>6):
-                print(dict_run["test_id"], "filter 3", question_id)
-                pass
-            else:
+            bool_status = True
+            if len(ls_indexes_correct_answers)>3:
+                print("--->>> removing --> " ,dict_run["test_id"], "filter 1", question_id, len(ls_indexes_correct_answers), "(there is a weird number of correct answers)")
+                bool_status = False
+            ls_indexes_evaluation = []
+            for a in ls_indexes_correct_answers:
+                if a>6:
+                    ls_indexes_evaluation.append(False)
+
+            if False in ls_indexes_evaluation:
+                bool_status=False
+                print("--->>> removing --> " , dict_run["test_id"], "filter 2", question_id, ls_indexes_correct_answers, "(one of the anwer indexes is out of range!)")
+
+
+            if bool_status:
                 dict_one_parsed_question ={
                     "source":dict_run["test_id"],
                     "question_id":question_id,
@@ -33,8 +38,9 @@ def process_one_test(dict_run):
                     "index_correct_answers":ls_indexes_correct_answers,
                     "overall_explanation":overall_explanation,
                     "domain":st_domain
-                }
+                    }
                 ls_questions_parsed.append(dict_one_parsed_question)
+
     with open(dict_run["path_output"], 'w', encoding='utf-8') as f:
         json.dump(ls_questions_parsed, f, ensure_ascii=False, indent=4)
 
@@ -69,7 +75,34 @@ if __name__ == '__main__':
         "path_source":"data/purchase01_T6.txt",
         "path_output":"data/purchase01_T6.json",
         "test_id":"Purchase01_T6"
-    }]
+    },
+        {
+        "path_source":"data/purchase02_T1.txt",
+        "path_output":"data/purchase02_T1.json",
+        "test_id":"Purchase02_T1"
+    },{
+        "path_source":"data/purchase02_T2.txt",
+        "path_output":"data/purchase02_T2.json",
+        "test_id":"Purchase02_T2"
+    },{
+        "path_source":"data/purchase02_T3.txt",
+        "path_output":"data/purchase02_T3.json",
+        "test_id":"Purchase02_T3"
+    },{
+        "path_source":"data/purchase02_T4.txt",
+        "path_output":"data/purchase02_T4.json",
+        "test_id":"Purchase02_T4"
+    },{
+        "path_source":"data/purchase02_T5.txt",
+        "path_output":"data/purchase02_T5.json",
+        "test_id":"Purchase02_T5"
+    },{
+        "path_source":"data/purchase02_T6.txt",
+        "path_output":"data/purchase02_T6.json",
+        "test_id":"Purchase02_T6"
+    }
+    ]
+
     for dict_run in dict_runs:
         process_one_test(dict_run)
 

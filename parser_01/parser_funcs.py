@@ -4,7 +4,12 @@ import re
 def clean_lines_one_question(ls_lines_one_question)->List[str]:
     ls_clean_lines = []
     for l in ls_lines_one_question:
-        l = l.replace("? (Select two)"," (Select two)?").strip()
+        if "(Select two)" in l:
+            l = l.replace("? (Select two)"," (Select two)?").strip()
+        elif "(Select TWO.)" in l:
+            l = l.replace("? (Select TWO.)", " (Select two)?").strip()
+        elif ("? (Select THREE.)") in l:
+            l = l.replace("? (Select THREE.)", " (Select three)?").strip()
         l = l.replace('\n', '')
         if len(l)>0:
             ls_clean_lines.append(l)
@@ -57,9 +62,9 @@ def analyze_answers(question_possible_answers):
     ls_correct_answers=[]
     ls_valid_possible_answers=[]
     for i in range(0, len(question_possible_answers)):
-        if question_possible_answers[i] in ["Correct answer", "Your answer is correct", "Your selection is correct"]:
+        if question_possible_answers[i] in ["Correct answer", "Your answer is correct", "Your selection is correct", "Correct selection"]:
             ls_correct_answers.append(question_possible_answers[i+1])
-        if question_possible_answers[i] not in["Correct answer", "Your answer is incorrect", "Your answer is correct", "Your selection is correct"]:
+        if question_possible_answers[i] not in["Correct answer", "Your answer is incorrect", "Your answer is correct", "Your selection is correct", "Correct selection", "Your selection is incorrect"]:
             ls_valid_possible_answers.append(question_possible_answers[i])
     ls_indexes_correct_answers = []
     for j in range(0,len(ls_valid_possible_answers)):
