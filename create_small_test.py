@@ -75,17 +75,17 @@ if __name__== "__main__":
     for j in range(0, len(ls_sample_questions)):
         q = ls_sample_questions[j]
         st_q = ""
-        st_q = st_q +  "# " + str(j+1) + ") "  +q["source"] + " " + q["question_id"]  + '\n'
+        st_q = st_q +  "# " +  " <font size='2'>"  + str(j+1) + ") "  +q["source"] + " " + q["question_id"]  +"</font>"  + '\n'
 
-        st_q = st_q  + "<font size='1'>"  + q["question_statement"]  + "</font>" +'\n'
+        st_q = st_q  + "<font size='2'>"  + q["question_statement"]  + "</font>" +'\n'
         st_q = st_q + '\n'
         for i in range(0,len(q["ls_possible_answers"])):
-            st_q = st_q  +  "- " +str(i)  + " " + "<font size='1'>" +  q["ls_possible_answers"][i] + "</font>" + '\n'
+            st_q = st_q  +  "- " +str(i)  + " " + "<font size='2'>" +  q["ls_possible_answers"][i] + "</font>" + '\n'
         st_q = st_q +'\n'
         pdf.add_section(Section(st_q, toc=False))
-        st_test = st_test + st_q
+        st_test = st_test + st_q + '\n'
 
-        st_overal_explanation =  st_overal_explanation + "\n" +  "## " + str(j+1) + ") "  +q["source"] + " " + q["question_id"]  + '\n\n' + "Index Correct Anwers: " + str(q["index_correct_answers"]) + '\n' + get_pretty_string(q["overall_explanation"]) + "\n\n\n"
+        st_overal_explanation =  st_overal_explanation + "\n" +  "# " +   " <font size='2'>"   + str(j+1) + ") "  +q["source"] + " " + q["question_id"]  + '\n\n' + "Index Correct Anwers: " + str(q["index_correct_answers"]) + '\n\n' + "</font>" +    get_pretty_string(q["overall_explanation"]) + "\n\n\n"
         st_answers = st_answers + str(j+1) + ") "  +q["source"] + " " + q["question_id"] + " " + str(q["index_correct_answers"]) + '\n'
 
 
